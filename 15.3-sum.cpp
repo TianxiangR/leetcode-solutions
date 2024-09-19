@@ -11,34 +11,38 @@ class Solution
 public:
     vector<vector<int>> threeSum(vector<int> &nums)
     {
-        sort(begin(nums), end(nums));
-        unordered_map<int, int> seen;
-        vector<vector<int>> res;
+        unordered_set<int> dup;
+        set<tuple<int, int, int>> res;
 
-        for (int i = 0; i + 2 < nums.size(); ++i)
+        for (int i; i < nums.size(); ++i)
         {
+            int i_val = nums[i];
+
+            if (dup.find(i_val) != end(dup))
+            {
+                continue;
+            }
+
+            unordered_set<int> *seen = new unordered_set<int>();
+
             for (int j = i + 1; j < nums.size(); ++j)
             {
-                int complement = -nums[i] - nums[j];
-                if (seen.count(complement) && seen[complement] >= i)
+                int j_val = nums[j];
+                int complement = -i_val - j_val;
+                if (seen->find(j_val) != seen->end())
                 {
-                    vector<int> comb = {nums[i], complement, nums[j]};
-                    sort(begin(comb), end(comb));
-                    res.push_back(comb);
+                    vector<int> triplet = {i_val, j_val, complement};
+                    sort(begin(triplet), end(triplet));
+                    tuple<int, int, int> tp = {triplet[0], triplet[1], triplet[2]};
+                    res.insert(tp);
                 }
-                else
-                {
-                    seen[nums[j]] = i;
-                }
-
-                while (j + 1 < nums.size() && nums[j] == nums[j + 1])
-                {
-                    j++;
-                }
+                seen->insert(j_val);
             }
+
+            delete seen;
         }
 
-        return res;
+        return vector<vector<int>>(begin(res))
     }
 };
 // @lc code=end

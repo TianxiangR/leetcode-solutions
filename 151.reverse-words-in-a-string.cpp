@@ -3,85 +3,66 @@
  *
  * [151] Reverse Words in a String
  */
-
+#include <bits/stdc++.h>
+using namespace std;
 // @lc code=start
 class Solution
 {
 public:
   string reverseWords(string s)
   {
-    // reverse the string entirely
-    size_t len = s.size(), p = 0, q = len - 1;
-    while (p < q)
-    {
-      swap(s[p], s[q]);
-      p++;
-      q--;
-    }
+    // Step 1: reverse the original string
+    reverse(begin(s), end(s));
 
-    // reverse words
-    size_t start = -1, end = -1;
-    for (int i = 0; i < len; ++i)
+    // Step 2: find the start and the end of a word and reverse it back to normal order  
+    int start = -1;
+    for (int i = 0; i < s.size(); ++i)
     {
-      if (s[i] != ' ')
+      char c = s[i];
+      if (c != ' ')
       {
         if (start == -1)
         {
           start = i;
         }
-
-        end = i;
-      }
-      else
-      {
-        while (start != -1 && start < end)
+        if (i == s.size() - 1 || s[i + 1] == ' ')
         {
-          swap(s[start], s[end]);
-          start++;
-          end--;
+          // reverse the word
+          int p = start, q = i;
+          while (p < q)
+          {
+            swap(s[p], s[q]);
+            p++;
+            q--;
+          }
+
+          start = -1;
+        }
+      }
+    }
+
+    // Step 3: remove extra spaces
+    int input_index = 0;
+    for (int i = 0; i < s.size(); ++i)
+    {
+      if (s[i] != ' ')
+      {
+        if (i > 0 && s[i - 1] == ' ' && input_index > 0)
+        {
+          s[input_index++] = ' ';
         }
 
-        start = -1;
+        s[input_index++] = s[i];
       }
     }
 
-    while (start != -1 && start < end)
+    // Step 4: remove extra chars
+    while (input_index != s.size())
     {
-      swap(s[start], s[end]);
-      start++;
-      end--;
+      s.pop_back();
     }
 
-    // remove spaces
-    bool remove_space = s[0] == ' ';
-    int replace_index = 0;
-    for (int i = 0; i < len; ++i)
-    {
-      if (remove_space)
-      {
-        while (i < len && s[i] == ' ')
-        {
-          ++i;
-        }
-        remove_space = false;
-        --i;
-        continue;
-      }
-      if (s[i] == ' ')
-      {
-        remove_space = true;
-      }
-
-      s[replace_index++] = s[i];
-    }
-
-    if (replace_index > 1 && s[replace_index - 1] == ' ')
-    {
-      return s.substr(0, replace_index - 1);
-    }
-
-    return s.substr(0, replace_index);
+    return s;
   }
 };
 // @lc code=end
-

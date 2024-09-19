@@ -21,11 +21,10 @@ public:
                 {
                     matrix[i][0] = 0;
                     matrix[0][j] = 0;
-                }
-
-                if (j == 0)
-                {
-                    isCol = true;
+                    if (i == 0 && j == 0)
+                    {
+                        isCol = true;
+                    }
                 }
             }
         }
@@ -43,7 +42,7 @@ public:
 
         if (matrix[0][0] == 0)
         {
-            for (int i = 1; i < matrix.size(); ++i)
+            for (int i = 1; i < matrix[i].size(); ++i)
             {
                 matrix[0][i] = 0;
             }
@@ -51,7 +50,7 @@ public:
 
         if (isCol)
         {
-            for (int i = 1; i < matrix[0].size(); ++i)
+            for (int i = 1; i < matrix.size(); ++i)
             {
                 matrix[i][0] = 0;
             }
@@ -62,7 +61,7 @@ public:
 int main()
 {
     Solution s;
-    vector<vector<int>> input = {{1, 1, 1, 1}, {1, 0, 1, 1}, {1, 1, 0, 0}, {0, 0, 0, 1}};
+    vector<vector<int>> input = {{0}};
     s.setZeroes(input);
 
     return 0;
